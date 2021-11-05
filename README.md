@@ -6,5 +6,6 @@ Based on nuntz/telegraf-snmp
 
 - Synology
 - Dell PowerEdge
+- MikroTik
 
 > PRs and issues welcome! Looking for community feedback for what MIBs people are using.
