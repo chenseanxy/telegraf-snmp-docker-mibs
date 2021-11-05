@@ -19,6 +19,11 @@ RUN \
     rm -rf support && \
     echo "Downloaded Dell PowerEdge MIBs" && \
     #
+    # MikroTik MIB
+    # https://wiki.mikrotik.com/wiki/Manual:SNMP#Management_information_base_.28MIB.29
+    # Link up to date as of 2021-11 (last updated 2020-09)
+    wget https://box.mikrotik.com/f/a41daf63d0c14347a088/?dl=1 -O MIKROTIK-MIB.txt --no-check-certificate && \
+    #
     # Cleanup
     rm -rf *.zip && \
     .
