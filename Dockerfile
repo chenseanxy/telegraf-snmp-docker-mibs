@@ -1,8 +1,20 @@
 FROM bitnami/minideb as build
 WORKDIR /mibs
 RUN \
+    # Add non-free -> weldpua2008/docker-net-snmp
+    export DEBIAN_RELEASE=$(awk -F'[" ]' '/VERSION=/{print $3}'  /etc/os-release | tr -cd '[[:alnum:]]._-' ) && \
+    echo "remove main from /etc/apt/sources.list" && \
+    sed -i '/main/d' /etc/apt/sources.list && \
+    echo "remove contrib from /etc/apt/sources.list" && \
+    sed -i '/contrib/d' /etc/apt/sources.list && \
+    echo "remove non-free from /etc/apt/sources.list" && \
+    sed -i '/non-free/d' /etc/apt/sources.list && \
+    echo "deb http://httpredir.debian.org/debian ${DEBIAN_RELEASE} main contrib non-free"  >> /etc/apt/sources.list && \
+    echo "deb http://httpredir.debian.org/debian ${DEBIAN_RELEASE}-updates main contrib non-free"  >> /etc/apt/sources.list && \
+    echo "deb http://security.debian.org ${DEBIAN_RELEASE}/updates main contrib non-free"  >> /etc/apt/sources.list && \
+    #
     # Dependencies
-    install_packages unzip wget && \
+    install_packages unzip wget snmp-mibs-downloader && \
     echo "Installed build dependencies" && \
     wwget() { wget --no-check-certificate --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" "$@"; } && \
     #
@@ -29,5 +41,5 @@ RUN \
     rm -rf *.zip && \
     .
 
-FROM nuntz/telegraf-snmp
+FROM telegraf
 COPY --from=build /mibs /usr/share/snmp/mibs
