@@ -34,4 +34,5 @@ RUN \
     .
 
 FROM telegraf
+COPY --from=build /usr/share/snmp/mibs /usr/share/snmp/mibs
 COPY --from=build /mibs /usr/share/snmp/mibs
